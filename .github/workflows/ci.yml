@@ -41,7 +41,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/megaspell/MegaspellServerRegistry:latest
+          tags: ghcr.io/megaspell/megaspell-server-registry:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
