@@ -1,0 +1,37 @@
+### Get all online servers
+GET {{host}}/online-servers
+
+### Register online server
+POST {{host}}/online-servers
+Content-Type: application/json
+X-Real-IP: 127.0.0.1
+
+{
+    "host": "localhost",
+    "port": 7777,
+    "gameVersion": 123,
+    "name": "Example server",
+    "mode": "Story",
+    "map": "Stable55Entrance",
+    "maxPlayers": 20,
+    "onlinePlayers": 0,
+    "offlineAuth": true,
+    "steamAuth": false,
+    "passwordProtected": false
+}
+
+### Get online server
+GET {{host}}/online-servers/localhost:7777
+
+### Keepalive online server
+POST {{host}}/online-servers/localhost:7777/keepalive
+Content-Type: application/json
+X-Real-IP: 127.0.0.1
+
+{
+    "onlinePlayers": 1
+}
+
+### Unregister online server
+DELETE {{host}}/online-servers/localhost:7777
+X-Real-IP: 127.0.0.1
