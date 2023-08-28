@@ -1,15 +1,11 @@
 package com.shimmermare.megaspell.serverregistry.api;
 
-import com.shimmermare.megaspell.serverregistry.EmbeddedPostgresConfig;
-import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import com.shimmermare.megaspell.serverregistry.BaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,12 +14,8 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@Import(EmbeddedPostgresConfig.class)
-@AutoConfigureEmbeddedDatabase(refresh = AutoConfigureEmbeddedDatabase.RefreshMode.BEFORE_EACH_TEST_METHOD)
 @WebAppConfiguration
-@ActiveProfiles("test")
-public class OnlineServersIntegrationText {
+public class OnlineServersIntegrationText extends BaseTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Value("${megaspell.real-ip-header}")

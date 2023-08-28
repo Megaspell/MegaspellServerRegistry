@@ -1,22 +1,14 @@
 package com.shimmermare.megaspell.serverregistry.server;
 
-import com.shimmermare.megaspell.serverregistry.EmbeddedPostgresConfig;
-import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import com.shimmermare.megaspell.serverregistry.BaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
 
-@SpringBootTest
-@Import(EmbeddedPostgresConfig.class)
-@AutoConfigureEmbeddedDatabase(refresh = AutoConfigureEmbeddedDatabase.RefreshMode.BEFORE_EACH_TEST_METHOD)
-@ActiveProfiles("test")
-public class ServerRegistryServiceText {
+public class ServerRegistryServiceText extends BaseTest {
     @Autowired
     private OnlineServerRepository onlineServerRepository;
     @Autowired
