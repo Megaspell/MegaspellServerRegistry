@@ -1,5 +1,10 @@
 package com.shimmermare.megaspell.serverregistry.job;
 
+import com.shimmermare.megaspell.serverregistry.server.OnlineServerRepository;
+import com.shimmermare.megaspell.serverregistry.server.RegisteredServersMetricsJob;
+import com.shimmermare.megaspell.serverregistry.server.ServerRegistryService;
+import com.shimmermare.megaspell.serverregistry.server.UnregisterStaleOnlineServersJob;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,5 +33,30 @@ public class JobConfig {
             @Qualifier("quartzProperties") Map<String, String> quartzProperties
     ) throws SchedulerException {
         return new JobScheduler(dataSource, applicationContext, quartzProperties);
+    }
+
+    @Bean
+    public JobAnnotationProcessor jobAnnotationProcessor(
+            JobScheduler scheduler,
+            ApplicationContext applicationContext
+    ) {
+        return new JobAnnotationProcessor(scheduler, applicationContext);
+    }
+
+    @CronJob(cron = "0,30 * * * * ?")
+    @Bean
+    public UnregisterStaleOnlineServersJob unregisterStaleOnlineServersJob(
+            ServerRegistryService serverRegistryService
+    ) {
+        return new UnregisterStaleOnlineServersJob(serverRegistryService);
+    }
+
+    @CronJob(cron = "0 * * * * ?")
+    @Bean
+    public RegisteredServersMetricsJob registeredServersMetricsJob(
+            OnlineServerRepository onlineServerRepository,
+            MeterRegistry meterRegistry
+    ) {
+        return new RegisteredServersMetricsJob(onlineServerRepository, meterRegistry);
     }
 }

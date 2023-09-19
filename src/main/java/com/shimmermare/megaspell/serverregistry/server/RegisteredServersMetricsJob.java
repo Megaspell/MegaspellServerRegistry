@@ -1,13 +1,11 @@
 package com.shimmermare.megaspell.serverregistry.server;
 
-import com.shimmermare.megaspell.serverregistry.job.CronJob;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-@CronJob(cron = "0 * * * * ?")
 public class RegisteredServersMetricsJob implements Job {
     private final OnlineServerRepository onlineServerRepository;
     private final AtomicInteger registeredServersMetricGauge;
