@@ -3,11 +3,7 @@ package com.shimmermare.megaspell.serverregistry.job;
 import org.quartz.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.stereotype.Component;
 
-@ConditionalOnBean(Scheduler.class)
-@Component
 public class JobAnnotationProcessor implements BeanPostProcessor {
     private final Scheduler scheduler;
 

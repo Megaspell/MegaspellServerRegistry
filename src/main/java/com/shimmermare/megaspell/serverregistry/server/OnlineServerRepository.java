@@ -2,6 +2,7 @@ package com.shimmermare.megaspell.serverregistry.server;
 
 import jakarta.annotation.Nonnull;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -9,10 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class OnlineServerRepository {
@@ -20,6 +18,12 @@ public class OnlineServerRepository {
 
     public OnlineServerRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public int count() {
+        Integer count = jdbcTemplate.queryForObject("select count(*) from online_server",
+                EmptySqlParameterSource.INSTANCE, Integer.class);
+        return Objects.requireNonNullElse(count, 0);
     }
 
     public List<OnlineServer> findAll() {
