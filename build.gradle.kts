@@ -26,6 +26,8 @@ dependencies {
     implementation("org.quartz-scheduler:quartz:2.3.2")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.zonky.test:embedded-database-spring-test:2.3.0")
     testImplementation("io.zonky.test:embedded-postgres:2.0.4")

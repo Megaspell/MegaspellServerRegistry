@@ -1,5 +1,7 @@
 package com.shimmermare.megaspell.serverregistry.server;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +19,24 @@ public class ServerRegistryService {
 
     private final OnlineServerRepository onlineServerRepository;
     private final TransactionTemplate transactionTemplate;
-
     private final int serverOnlineTimeoutSec;
+
+    private final Counter serverRegisteredMetricCounter;
+    private final Counter serverUnregisteredMetricCounter;
 
     public ServerRegistryService(
             OnlineServerRepository onlineServerRepository,
             TransactionTemplate transactionTemplate,
             @Value("${megaspell.server-online-timeout-seconds:120}")
-            int serverOnlineTimeoutSec
+            int serverOnlineTimeoutSec,
+            MeterRegistry meterRegistry
     ) {
         this.onlineServerRepository = onlineServerRepository;
         this.transactionTemplate = transactionTemplate;
         this.serverOnlineTimeoutSec = serverOnlineTimeoutSec;
+
+        serverRegisteredMetricCounter = meterRegistry.counter("server_registered");
+        serverUnregisteredMetricCounter = meterRegistry.counter("server_unregistered");
     }
 
     public List<OnlineServer> getOnlineServers() {
@@ -54,6 +62,7 @@ public class ServerRegistryService {
                     .lastOnline(Instant.now())
                     .build();
             onlineServerRepository.createOrUpdate(toRegister);
+            serverRegisteredMetricCounter.increment();
             LOGGER.info("Server {}:{} is registered as online: {}", server.host(), server.port(), toRegister);
             return toRegister;
         });
@@ -77,6 +86,7 @@ public class ServerRegistryService {
 
     public void unregisterOnlineServer(@Nonnull String host, int port) {
         if (onlineServerRepository.delete(host, port)) {
+            serverUnregisteredMetricCounter.increment();
             LOGGER.info("Unregistered online server {}:{}", host, port);
         } else {
             LOGGER.info("Attempted to unregister online server {}:{} but there was no such server", host, port);
@@ -87,6 +97,7 @@ public class ServerRegistryService {
         Instant threshold = Instant.now().minusSeconds(serverOnlineTimeoutSec);
         int deleted = onlineServerRepository.deleteWhereLastOnlineIsBefore(threshold);
         if (deleted > 0) {
+            serverUnregisteredMetricCounter.increment(deleted);
             LOGGER.info("Unregistered {} servers which didn't have keepalive in {}s", deleted, serverOnlineTimeoutSec);
         }
     }

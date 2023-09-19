@@ -54,4 +54,9 @@ public class JobConfig {
 
         return scheduler;
     }
+
+    @Bean
+    public JobAnnotationProcessor jobAnnotationProcessor(Scheduler scheduler) {
+        return new JobAnnotationProcessor(scheduler);
+    }
 }
