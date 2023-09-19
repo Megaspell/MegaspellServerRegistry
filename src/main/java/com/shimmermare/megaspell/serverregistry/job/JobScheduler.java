@@ -1,13 +1,14 @@
 package com.shimmermare.megaspell.serverregistry.job;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.spi.JobFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
@@ -15,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Map;
 import java.util.Properties;
 
-public class JobScheduler {
+public class JobScheduler implements DisposableBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(JobScheduler.class);
 
     private final Scheduler scheduler;
@@ -51,13 +52,13 @@ public class JobScheduler {
         }
     }
 
-    @PostConstruct
-    private void Start() throws SchedulerException {
+    @EventListener(ApplicationReadyEvent.class)
+    public void Start() throws SchedulerException {
         scheduler.start();
     }
 
-    @PreDestroy
-    private void Stop() throws SchedulerException {
+    @Override
+    public void destroy() throws Exception {
         scheduler.shutdown(true);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
@@ -31,6 +32,7 @@ public class JobConfig {
     }
 
     @Bean
+    @Lazy(value = false)
     public JobAnnotationProcessor jobAnnotationProcessor(JobScheduler scheduler) {
         return new JobAnnotationProcessor(scheduler);
     }

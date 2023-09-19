@@ -12,7 +12,7 @@ public class JobAnnotationProcessor implements BeanPostProcessor {
     }
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         Class<?> clazz = bean.getClass();
         if (!Job.class.isAssignableFrom(clazz)) return bean;
 
