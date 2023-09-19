@@ -5,9 +5,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 public class JobAnnotationProcessor implements BeanPostProcessor {
-    private final Scheduler scheduler;
+    private final JobScheduler scheduler;
 
-    public JobAnnotationProcessor(Scheduler scheduler) {
+    public JobAnnotationProcessor(JobScheduler scheduler) {
         this.scheduler = scheduler;
     }
 
@@ -30,11 +30,7 @@ public class JobAnnotationProcessor implements BeanPostProcessor {
                 .forJob(beanName)
                 .build();
 
-        try {
-            scheduler.scheduleJob(jobDetail, trigger);
-        } catch (SchedulerException e) {
-            throw new IllegalStateException("Failed to initialize job " + beanName + " schedule", e);
-        }
+        scheduler.scheduleJob(jobDetail, trigger);
         return bean;
     }
 }

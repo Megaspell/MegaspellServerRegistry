@@ -1,6 +1,5 @@
 package com.shimmermare.megaspell.serverregistry.job;
 
-import org.quartz.Scheduler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -15,7 +14,7 @@ import java.lang.annotation.Target;
  * automatically scheduled for execution.
  */
 @DependsOn("jobScheduler")
-@ConditionalOnBean(Scheduler.class)
+@ConditionalOnBean(JobScheduler.class)
 @Component
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

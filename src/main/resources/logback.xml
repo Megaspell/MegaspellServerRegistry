@@ -28,4 +28,6 @@
         <appender-ref ref="RollingFile"/>
         <appender-ref ref="Console"/>
     </root>
+
+    <logger name="com.shimmermare.megaspell.serverregistry.job.JobScheduler" level="DEBUG"/>
 </configuration>
