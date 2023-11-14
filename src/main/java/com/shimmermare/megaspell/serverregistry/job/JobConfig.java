@@ -1,9 +1,6 @@
 package com.shimmermare.megaspell.serverregistry.job;
 
-import com.shimmermare.megaspell.serverregistry.server.OnlineServerRepository;
-import com.shimmermare.megaspell.serverregistry.server.RegisteredServersMetricsJob;
-import com.shimmermare.megaspell.serverregistry.server.ServerRegistryService;
-import com.shimmermare.megaspell.serverregistry.server.UnregisterStaleOnlineServersJob;
+import com.shimmermare.megaspell.serverregistry.server.*;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,5 +55,14 @@ public class JobConfig {
             MeterRegistry meterRegistry
     ) {
         return new RegisteredServersMetricsJob(onlineServerRepository, meterRegistry);
+    }
+
+    @CronJob(cron = "0 * * * * ?")
+    @Bean
+    public PlayerMetricsJob playerMetricsJob(
+            OnlineServerRepository onlineServerRepository,
+            MeterRegistry meterRegistry
+    ) {
+        return new PlayerMetricsJob(onlineServerRepository, meterRegistry);
     }
 }

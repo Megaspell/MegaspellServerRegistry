@@ -26,6 +26,12 @@ public class OnlineServerRepository {
         return Objects.requireNonNullElse(count, 0);
     }
 
+    public int countOnlinePlayers() {
+        Integer count = jdbcTemplate.queryForObject("select sum(online_players) from online_server",
+                EmptySqlParameterSource.INSTANCE, Integer.class);
+        return Objects.requireNonNullElse(count, 0);
+    }
+
     public List<OnlineServer> findAll() {
         return jdbcTemplate.query("select * from online_server", this::mapServerRow);
     }
